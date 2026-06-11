@@ -14,6 +14,7 @@ function App() {
 
   const [usernameTouched, setUsernameTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
+  const [descriptionTouched, setDescriptionTouched] = useState(false);
 
   const [success, setSuccess] = useState(false);
 
@@ -74,6 +75,20 @@ function App() {
     }
   };
 
+  const verifyDescription = (e) => {
+    const trimmedDescription = description.trim();
+
+    if (trimmedDescription.length >= 100 && trimmedDescription.length <= 1000) {
+      console.log('Descrizione accettata');
+      return true;
+    } else {
+      console.log(
+        `La descrizione è al disotto della lunghezza minima 100 caratteri o massima 1000 consentita, la sua lunghezza è: ${trimmedDescription.length}`,
+      );
+      return false;
+    }
+  };
+
   const verifyCompiledForm = (e) => {
     if (nameComplete === '')
       return console.log('Il campo Name non è compilato');
@@ -88,7 +103,7 @@ function App() {
     if (description === '')
       return console.log('Il campo Descrizione non è compilato');
     else {
-      console.log('Il form è compilato correttamente');
+      console.log('Il form ha i campi compilati');
       return true;
     }
   };
@@ -96,7 +111,12 @@ function App() {
   const submit = (e) => {
     e.preventDefault();
 
-    if (verifyCompiledForm() && yearsOfExperience >= 0 && verifyPassword()) {
+    if (
+      verifyCompiledForm() &&
+      yearsOfExperience >= 0 &&
+      verifyPassword() &&
+      verifyDescription()
+    ) {
       setSuccess(true);
 
       console.log(`Hai inviato il submit con i seguenti dati:
@@ -228,12 +248,22 @@ function App() {
             <textarea
               rows={3}
               type="text-area"
-              className="form-control"
+              className={`form-control ${descriptionTouched ? (verifyDescription() ? `border border-success` : `border border-danger `) : ``}`}
               id="input-description"
               onChange={(e) => setDescription(e.target.value)}
+              onBlur={(e) => setDescriptionTouched(true)}
               value={description}
               placeholder="Inserisci qui la descrizione"
             />
+
+            {descriptionTouched && !verifyDescription() && (
+              <div className="mt-2  text-danger">
+                <p className="h5">
+                  La descrizione è al disotto della lunghezza minima 100
+                  caratteri o massima 1000 consentita
+                </p>
+              </div>
+            )}
           </div>
 
           <div>
