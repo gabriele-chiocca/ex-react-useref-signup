@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './App.css';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
 
 function App() {
-  const [nameComplete, setNameComplete] = useState('');
+  const nameRef = useRef();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [specialization, setSpecialization] = useState('');
+  const specRef = useRef();
   const [yearsOfExperience, setYearsOfExperience] = useState('');
   const [description, setDescription] = useState('');
 
@@ -30,11 +30,7 @@ function App() {
 
     for (const char of username) {
       if (letters.includes(char) || numbers.includes(char)) {
-        console.log(`Il carattere ${char} passa il controllo`);
       } else {
-        console.log(
-          `Il carattere ${char} non ha passato il controllo, inserire un username adatto`,
-        );
         return false;
       }
     }
@@ -90,13 +86,13 @@ function App() {
   };
 
   const verifyCompiledForm = (e) => {
-    if (nameComplete === '')
+    if (nameRef.current.value === '')
       return console.log('Il campo Name non è compilato');
     if (username === '')
       return console.log('Il campo Username non è compilato');
     if (password === '')
       return console.log('Il campo password non è compilato');
-    if (specialization === '')
+    if (specRef.current.value === '')
       return console.log('Il campo Specializzazione non è compilato');
     if (yearsOfExperience === '')
       return console.log('Il campo Anni di Esperienza non è compilato');
@@ -120,10 +116,10 @@ function App() {
       setSuccess(true);
 
       console.log(`Hai inviato il submit con i seguenti dati:
-      - Name : ${nameComplete}
+      - Name : ${nameRef.current.value}
       - Username: ${username}
       - Password: ${password}
-      - Specializzazione: ${specialization}
+      - Specializzazione: ${specRef.current.value}
       - Esperienza: ${yearsOfExperience}
       - Description: ${description}
       `);
@@ -152,8 +148,7 @@ function App() {
               type="text"
               className="form-control"
               id="input-name"
-              onChange={(e) => setNameComplete(e.target.value)}
-              value={nameComplete}
+              ref={nameRef}
               placeholder="Inserisci il nome completo"
             />
           </div>
@@ -214,8 +209,7 @@ function App() {
             <select
               className="form-select"
               aria-label="Default select example"
-              value={specialization}
-              onChange={(e) => setSpecialization(e.target.value)}
+              ref={specRef}
             >
               <option value={''}>Scegli la specializzazione</option>
               <option>Full Stack</option>
