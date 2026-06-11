@@ -13,6 +13,7 @@ function App() {
   const [description, setDescription] = useState('');
 
   const [usernameTouched, setUsernameTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const [success, setSuccess] = useState(false);
 
@@ -39,6 +40,40 @@ function App() {
     return true;
   };
 
+  const verifyPassword = (e) => {
+    if (password.length < 8) {
+      console.log('La password deve avere almeno 8 caratteri');
+      return false;
+    }
+
+    let hasNumber = false;
+    let hasLetter = false;
+    let hasSymbols = false;
+
+    for (const char of password) {
+      if (letters.includes(char.toLocaleLowerCase())) {
+        hasLetter = true;
+      } else if (numbers.includes(char)) {
+        hasNumber = true;
+      } else if (symbols.includes(char)) {
+        hasSymbols = true;
+      } else {
+        console.log(
+          'La password non contiene uno tra Lettere, simboli o caratteri',
+        );
+        return false;
+      }
+    }
+
+    if (hasLetter && hasNumber && hasSymbols) {
+      console.log('La password è compilata correttamente');
+      return true;
+    } else {
+      console.log('Compilata non correttamente, inserisci una nuova password');
+      return false;
+    }
+  };
+
   const verifyCompiledForm = (e) => {
     if (nameComplete === '')
       return console.log('Il campo Name non è compilato');
@@ -61,7 +96,7 @@ function App() {
   const submit = (e) => {
     e.preventDefault();
 
-    if (verifyCompiledForm() && yearsOfExperience >= 0) {
+    if (verifyCompiledForm() && yearsOfExperience >= 0 && verifyPassword()) {
       setSuccess(true);
 
       console.log(`Hai inviato il submit con i seguenti dati:
@@ -132,12 +167,21 @@ function App() {
             </label>
             <input
               type="password"
-              className="form-control"
+              className={`form-control ${passwordTouched ? (verifyPassword() ? `border border-success` : `border border-danger `) : ``}`}
               id="input-password"
               onChange={(e) => setPassword(e.target.value)}
+              onBlur={(e) => setPasswordTouched(true)}
               value={password}
               placeholder="Inserisci la tua password"
             />
+            {passwordTouched && !verifyPassword() && (
+              <div className="mt-2  text-danger">
+                <p className="h5">
+                  Password non valida deve superare 8 caratteri, e contenere
+                  almeno 1 numero, 1 lettera ed 1 simbolo
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="mb-3">
