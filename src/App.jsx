@@ -12,7 +12,32 @@ function App() {
   const [yearsOfExperience, setYearsOfExperience] = useState('');
   const [description, setDescription] = useState('');
 
+  const [usernameTouched, setUsernameTouched] = useState(false);
+
   const [success, setSuccess] = useState(false);
+
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers = '0123456789';
+  const symbols = "!@#$%^&*()-_=+[]{}|;:'\\";
+
+  const verifyUsername = (e) => {
+    if (username.length < 6) {
+      console.log('Username deve avere almeno 6 caratteri');
+      return false;
+    }
+
+    for (const char of username) {
+      if (letters.includes(char) || numbers.includes(char)) {
+        console.log(`Il carattere ${char} passa il controllo`);
+      } else {
+        console.log(
+          `Il carattere ${char} non ha passato il controllo, inserire un username adatto`,
+        );
+        return false;
+      }
+    }
+    return true;
+  };
 
   const verifyCompiledForm = (e) => {
     if (nameComplete === '')
@@ -84,12 +109,21 @@ function App() {
             </label>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${usernameTouched ? (verifyUsername() ? `border border-success` : `border border-danger `) : ``}`}
               id="input-username"
               onChange={(e) => setUsername(e.target.value)}
+              onBlur={(e) => setUsernameTouched(true)}
               value={username}
               placeholder="Inserisci il tuo Username"
             />
+            {usernameTouched && !verifyUsername() && (
+              <div className="mt-2  text-danger">
+                <p className="h5">
+                  Username non valido deve superare i 6 caratteri, e contenere
+                  solo numeri e lettere
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="mb-3">
