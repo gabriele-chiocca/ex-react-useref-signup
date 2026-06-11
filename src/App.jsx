@@ -12,9 +12,34 @@ function App() {
   const [yearsOfExperience, setYearsOfExperience] = useState('');
   const [description, setDescription] = useState('');
 
+  const [success, setSuccess] = useState(false);
+
+  const verifyCompiledForm = (e) => {
+    if (nameComplete === '')
+      return console.log('Il campo Name non è compilato');
+    if (username === '')
+      return console.log('Il campo Username non è compilato');
+    if (password === '')
+      return console.log('Il campo password non è compilato');
+    if (specialization === '')
+      return console.log('Il campo Specializzazione non è compilato');
+    if (yearsOfExperience === '')
+      return console.log('Il campo Anni di Esperienza non è compilato');
+    if (description === '')
+      return console.log('Il campo Descrizione non è compilato');
+    else {
+      console.log('Il form è compilato correttamente');
+      return true;
+    }
+  };
+
   const submit = (e) => {
     e.preventDefault();
-    console.log(`Hai inviato il submit con i seguenti dati:
+
+    if (verifyCompiledForm() && yearsOfExperience >= 0) {
+      setSuccess(true);
+
+      console.log(`Hai inviato il submit con i seguenti dati:
       - Name : ${nameComplete}
       - Username: ${username}
       - Password: ${password}
@@ -22,7 +47,16 @@ function App() {
       - Esperienza: ${yearsOfExperience}
       - Description: ${description}
       `);
+    } else {
+      console.log(
+        'Hai messo un numero negativo negli anni di esperienza o non hai compilato il form in modo corretto, non è possibile inviarlo',
+      );
+    }
   };
+
+  if (success) {
+    return <SuccessMessage></SuccessMessage>;
+  }
 
   return (
     <div className="container mt-5">
@@ -85,7 +119,7 @@ function App() {
               value={specialization}
               onChange={(e) => setSpecialization(e.target.value)}
             >
-              <option>Scegli la specializzazione</option>
+              <option value={''}>Scegli la specializzazione</option>
               <option>Full Stack</option>
               <option>Frontend</option>
               <option>Backend</option>
@@ -130,6 +164,16 @@ function App() {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+}
+
+function SuccessMessage() {
+  return (
+    <div className="container bg bg-success rounded">
+      <div className="mt-5 p-5 text-white">
+        <h2>Complimenti ti sei registrato</h2>
       </div>
     </div>
   );
