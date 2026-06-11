@@ -9,7 +9,7 @@ function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const specRef = useRef();
-  const [yearsOfExperience, setYearsOfExperience] = useState('');
+  const yearsRef = useRef();
   const [description, setDescription] = useState('');
 
   const [usernameTouched, setUsernameTouched] = useState(false);
@@ -94,7 +94,7 @@ function App() {
       return console.log('Il campo password non è compilato');
     if (specRef.current.value === '')
       return console.log('Il campo Specializzazione non è compilato');
-    if (yearsOfExperience === '')
+    if (yearsRef.current.value === '')
       return console.log('Il campo Anni di Esperienza non è compilato');
     if (description === '')
       return console.log('Il campo Descrizione non è compilato');
@@ -109,7 +109,7 @@ function App() {
 
     if (
       verifyCompiledForm() &&
-      yearsOfExperience >= 0 &&
+      yearsRef.current.value >= 0 &&
       verifyPassword() &&
       verifyDescription()
     ) {
@@ -120,7 +120,7 @@ function App() {
       - Username: ${username}
       - Password: ${password}
       - Specializzazione: ${specRef.current.value}
-      - Esperienza: ${yearsOfExperience}
+      - Esperienza: ${yearsRef.current.value}
       - Description: ${description}
       `);
     } else {
@@ -229,8 +229,7 @@ function App() {
               type="number"
               className="form-control"
               id="input-experience"
-              onChange={(e) => setYearsOfExperience(e.target.value)}
-              value={yearsOfExperience}
+              ref={yearsRef}
               placeholder="Inserisci il numero di anni riguardo la tua esperienza"
             />
           </div>
